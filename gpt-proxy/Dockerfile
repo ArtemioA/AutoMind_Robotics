@@ -1,8 +1,16 @@
+# Dockerfile
 FROM python:3.11-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+
 WORKDIR /app
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY app ./app
-ENV PORT=8080
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+COPY . .
+
+# Marca de versión visible
+ENV PORT=8080 PYTHONUNBUFFERED=1
+# (opcional) imprime marca al iniciar
+ENV STARTUP_MARK="✅ Deploy marker: Artemio v1.7-test"
+
+CMD [ "bash", "-lc", "echo $STARTUP_MARK && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind :$PORT --timeout 120" ]
