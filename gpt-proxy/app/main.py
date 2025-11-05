@@ -73,7 +73,7 @@ def infer(payload: InferenceIn):
             input=[{"role": "user", "content": content}],
         )
 
-        return {"model": MODEL, "output": resp.output_text, "debug": debug}
+        return resp.output_text#{"model": MODEL, "output": resp.output_text, "debug": debug}
 
     except HTTPException:
         raise
